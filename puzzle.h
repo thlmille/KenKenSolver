@@ -1,6 +1,8 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -16,7 +18,7 @@ class puzzle {
  private:
   int size;
   vector<rule> rules;
-  vector<vector<int> > solution;
+  int **solution;
  public:
   puzzle (int csize, vector<rule> crules);
   void solve ();

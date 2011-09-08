@@ -1,5 +1,6 @@
 #include "puzzle.h"
 
+// Puzzle constructor
 puzzle::puzzle (int csize, vector<rule> crules) {
   this->size = csize;
   this->rules = crules;
@@ -62,7 +63,28 @@ void puzzle::update_possible_column (int taken, int column) {
   }
 }
 
+// Use rules to update the possible map
+void puzzle::do_rules_elimination () {
+  // Iterate through rules and call appropriate reducing functions
+  vector<rule>::iterator rit = this->rules.begin();
+  char rop;
+  for (; rit != this->rules.end(); ++rit) {
+    rop = rit->op;
+    switch (rop) {
+    case '+': this->add_reduce(*rit);
+    case '-': this->sub_reduce(*rit);
+    case '/': this->div_reduce(*rit);
+    case '*': this->mul_reduce(*rit);
+    }
+  }
+}
+
 void puzzle::solve () {
+
+  // squares_filled parameter, when this variable is 
+  //   equal to nsquares, then the puzzle has been solved
+  int nsquares = this->size*this->size;
+  int squares_filled = 0;
 
   // Allocate 2-dimensional solution array
   this->solution = (int**) calloc(this->size+1, sizeof(int*));
@@ -77,6 +99,23 @@ void puzzle::solve () {
       int i = rit->squares[0].first;
       int j = rit->squares[0].second;
       solution[i][j] = rit->total;
+      squares_filled++;
     }
+  }
+
+  // update possibilities
+  this->update_possible();
+
+  // Main solving loop will work as follows:
+  //   Iterate through rules and eliminate impossible numbers
+  //   Where there is only one possible number, update our
+  //      solution array
+  //   Update possibles according to new solution array
+  //   Repeat until our solution array is full
+  // Essentially, the puzzle is being continually reduced until
+  //   we are left with only the answer
+
+  while (squares_filled != nsquares) {
+    this->do_rules_elimination();
   }
 }

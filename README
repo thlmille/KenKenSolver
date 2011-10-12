@@ -1,1 +1,9 @@
 KenKen puzzle solver.
+KenKen puzzles are supposed to be NP complete, as they can be reduced
+from Sudoku puzzles which are also NP complete. But according to Will
+Shortz, the editor of a collection of KenKen puzzles I own, there should
+be a path of logic that you can follow through every KenKen puzzle
+and guess and check isn't necessary. This doesn't sound NP-complete to me,
+so part of my goal in this project is to figure out if there is a special
+case of KenKen that can be solved in time P, and if this special case is
+really what we see in most of the puzzles we solve.
